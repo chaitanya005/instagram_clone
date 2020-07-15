@@ -60,12 +60,13 @@ const SignUp = () => {
                 })
             }).then(res=> res.json())
             .then(data=>{
-                if (data.error){
-                    M.toast({html: data.error,classes:"#c62828 red darken-3"})
-                }else {
-                    M.toast({html:data.message, classes : "#43a047 green darken-1"})
-                    history.push('/signin')
-                }
+                console.log (data)
+                // if (data.error){
+                //     M.toast({html: data.error,classes:"#c62828 red darken-3"})
+                // }else {
+                //     M.toast({html:data.message, classes : "#43a047 green darken-1"})
+                //     history.push('/signin')
+                // }
             }).catch(err => {
                 console.log (err)
             })
