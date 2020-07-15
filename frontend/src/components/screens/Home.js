@@ -28,7 +28,6 @@ const Home  = ()=>{
               })
           }).then(res=>res.json())
           .then(result=>{
-                   //   console.log(result)
             const newData = data.map(item=>{
                 if(item._id==result._id){
                     return result
@@ -115,7 +114,8 @@ const Home  = ()=>{
                data.map(item=>{
                    return(
                        <div className="card home-card" key={item._id}>
-                            <h5 style={{padding:"5px"}}><Link to={item.postedBy._id !== state._id?"/profile/"+item.postedBy._id :"/profile"  }>{item.postedBy.name}</Link> {item.postedBy._id == state._id 
+                            
+                            <h5 style={{padding:"5px"}}><Link to={item.postedBy._id !== state._id? "/profile/"+item.postedBy._id :"/profile"  }>{item.postedBy.name}</Link> {item.postedBy._id == state._id 
                             && <i className="material-icons" style={{
                                 float:"right"
                             }} 

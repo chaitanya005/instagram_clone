@@ -7,10 +7,7 @@ const CreatePost = () => {
     const [body, setBody] = useState("")
     const [image, setImage] = useState("")
     const [url, setUrl] = useState("")
-
     
-
-
     //whever we change the pic useEffect will modifies the url and update setUrl(data.url)
     useEffect  (()=> {
         if (url) {
