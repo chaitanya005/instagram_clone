@@ -8,14 +8,24 @@ const {JWT_SECRET} = require('../config/keys')
 const requireLogin = require('../middleware/requireLogin')
 const nodemailer = require('nodemailer')
 const sendgridTransport = require('nodemailer-sendgrid-transport')
+// const sgMail = require('@sendgrid/mail')
+// const API_KEY = require ('../config/keys')
 
 //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
+// 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
 
+//instagram     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
 const transporter = nodemailer.createTransport(sendgridTransport({
+    service  : "Gmail",
     auth:{
-        api_key:"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"
+        api_key:"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"
     }
 }))
+
+
+
+
+
 
 router.get ('/protected',requireLogin,(req,res) =>  {
     res.send("hello user")
@@ -46,12 +56,12 @@ router.post ('/signup',(req,res) => {
                     user.save()
                     .then(user => {
                         // lecture 47
-                    transporter.sendMail({
-                        to:user.email,
-                        from:"no-reply@insta.com",
-                        subject:"signup success",
-                        html:"<h1>welcome to instagram</h1>"
-                    })
+                        transporter.sendMail({
+                            to:user.email,
+                            from:"chaitanyamuvvala@outlook.com",
+                            subject:"signup success",
+                            html:"<h1>welcome to instagram</h1>"
+                        })
                         // end
 
                         res.json({message :'user sucessfully saved in Database'})
