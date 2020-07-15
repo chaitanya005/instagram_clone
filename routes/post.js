@@ -5,16 +5,16 @@ const requireLogin = require ('../middleware/requireLogin')
 const Post = mongoose.model("Post")
 mongoose.set('useFindAndModify', false);
 
-router.get('/allposts', requireLogin, (req,res)  => {
+router.get('/allpost',requireLogin,(req,res)=>{
     Post.find()
-    .populate("postedBy", "_id name")
-    .populate("comments.postedBy" , "_id name")
-    .then(posts =>  {
+    .populate("postedBy","_id name")
+    .populate("comments.postedBy","_id name")
+    .sort('-createdAt')
+    .then((posts)=>{
         res.json({posts})
-    })
-    .catch(err  => {
+    }).catch(err=>{
         console.log(err)
-    })
+    })  
 })
 
 //only see the posts which we are following

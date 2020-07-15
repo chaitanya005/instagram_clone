@@ -40,13 +40,13 @@ router.post ('/signup',(req,res) => {
                     user.save()
                     .then(user => {
                         //lecture 47
-                        tranporter .sendMail ({
-                            to :user.email,
-                            from : "no-reply@insta.com",
-                            subject : "signup success",
-                            html : "<h1>Welcome to instagram</h1>"
+                        // tranporter .sendMail ({
+                        //     to :user.email,
+                        //     from : "no-reply@insta.com",
+                        //     subject : "signup success",
+                        //     html : "<h1>Welcome to instagram</h1>"
 
-                        })
+                        // })
                         //end
 
                         res.json({message :'user sucessfully saved in Database'})
