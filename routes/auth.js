@@ -2,23 +2,22 @@ const express = require ('express')
 const router = express.Router()
 const mongoose = require('mongoose')
 const User = mongoose.model ("User")
+const crypto = require ('crypto')
 const bcrypt = require ("bcryptjs")
 const jwt = require("jsonwebtoken")
 const {JWT_SECRET} = require('../config/keys')
 const requireLogin = require('../middleware/requireLogin')
 const nodemailer = require('nodemailer')
 const sendgridTransport = require('nodemailer-sendgrid-transport')
-// const sgMail = require('@sendgrid/mail')
-// const API_KEY = require ('../config/keys')
+const {SENDGRID_API,EMAIL} = require ("../config/keys")
 
-//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
-// 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
+
 
 //instagram     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
 const transporter = nodemailer.createTransport(sendgridTransport({
     service  : "Gmail",
     auth:{
-        api_key:"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"
+        api_key:SENDGRID_API
     }
 }))
 
@@ -106,5 +105,57 @@ router.post ('/signin',(req,res) => {
         
     })
 })
+
+
+router.post ('/resetpassword',(req,res) => {
+    crypto.randomBytes(32,(err,buffer)=>{
+        if (err) {
+            console.log (err)
+        }
+        const token = buffer.toString("hex")
+        User.findOne({email:req.body.email})
+        .then  (user => {
+            if (!user) {
+                return res.json({error:"User don't exist"})
+            }
+            user.resetToken = token
+            user.expireToken = Date.now() + 3600000 //this token is only valid for one hour 
+            user.save().then((result) => {
+                transporter.sendMail({
+                    to : user.email,
+                    from : "chaitanyamuvvala@outlook.com",
+                    subject : "Reset Password",
+                    html :`
+                    <p>Reset you password here</p>
+                    <h5>Click here <a href = "${EMAIL}/${token}">RESET</a> your password</h5>`
+                })
+
+                res.json ({message : "We have sent a reset link to your email"})
+            })
+        })
+    })
+})
+
+router.post  ('/newpassword',(req,res)=>{
+    const newpassword = req.body.password
+    const sentToken = req.body.token
+    User.findOne({resetToken:sentToken,expireToken:{$gt:Date.now()}})
+    .then(user => {
+        if (!user) {
+            return res.json({error:"Link Expired"})
+        }
+        bcrypt.hash(newpassword,12).then(hashedpassword => {
+            user.password = hashedpassword
+            user.resetToken = undefined
+            user.expireToken = undefined
+            user.save().then((savedUser) => {
+                res.json({message : "password Updated"})
+            })
+        }).catch(err => {
+            console.log (err)
+        })
+    })
+})
+
 
 module.exports = router
