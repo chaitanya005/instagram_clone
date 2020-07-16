@@ -54,15 +54,12 @@ router.post ('/signup',(req,res) => {
         
                     user.save()
                     .then(user => {
-                        // lecture 47
                         transporter.sendMail({
                             to:user.email,
                             from:"chaitanyamuvvala@outlook.com",
                             subject:"signup success",
                             html:"<h1>welcome to instagram</h1>"
                         })
-                        // end
-
                         res.json({message :'user sucessfully saved in Database'})
                     })
                     .catch(err => {
