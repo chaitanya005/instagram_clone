@@ -13,15 +13,12 @@ const {SENDGRID_API,EMAIL} = require ("../config/keys")
 
 
 
-//instagram     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
 const transporter = nodemailer.createTransport(sendgridTransport({
     service  : "Gmail",
     auth:{
         api_key:SENDGRID_API
     }
 }))
-
-
 
 
 
@@ -56,7 +53,7 @@ router.post ('/signup',(req,res) => {
                     .then(user => {
                         transporter.sendMail({
                             to:user.email,
-                            from:"chaitanyamuvvala@outlook.com",
+                            from:"your verified address", //verifed address by sendGrid
                             subject:"signup success",
                             html:"<h1>welcome to instagram</h1>"
                         })
@@ -120,7 +117,7 @@ router.post ('/resetpassword',(req,res) => {
             user.save().then((result) => {
                 transporter.sendMail({
                     to : user.email,
-                    from : "chaitanyamuvvala@outlook.com",
+                    from:"your verified address", //verifed address by sendGrid
                     subject : "Reset Password",
                     html :`
                     <p>Reset you password here</p>
